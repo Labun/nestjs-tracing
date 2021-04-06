@@ -1,9 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { FORMAT_HTTP_HEADERS, FORMAT_TEXT_MAP, Span, Tags } from 'opentracing';
-
 import { TRACER_CARRIER_INFO } from './constant';
 import { AsyncContext } from './hook';
 import { TracingModule } from './tracing.module';
+
 
 /**
  * Created by Rain on 2020/7/21
@@ -54,12 +54,12 @@ export class HttpServiceInterceptors {
       },
       (error: any) => {
         const config = error.config as AxiosRequestConfig & { span: Span };
-        config.span.log({
+        config?.span.log({
           result: error.response?.data,
           statusCode: error.response?.status,
         });
-        config.span.setTag(Tags.ERROR, true);
-        config.span.finish();
+        config?.span.setTag(Tags.ERROR, true);
+        config?.span.finish();
         return Promise.reject(error);
       },
     ];
